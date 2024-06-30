@@ -78,6 +78,10 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
         . . . . . e 2 2 2 2 2 2 e . . . 
         `)
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
+    info.changeLifeBy(-1)
+})
+let da_ops: Sprite = null
 let mySprite: Sprite = null
 mySprite = sprites.create(img`
     . . . . . . . . . . . . . . . . 
@@ -100,3 +104,29 @@ mySprite = sprites.create(img`
 controller.moveSprite(mySprite, 300, 300)
 tiles.setCurrentTilemap(tilemap`level2`)
 scene.cameraFollowSprite(mySprite)
+for (let value of tiles.getTilesByType(assets.tile`myTile17`)) {
+    da_ops = sprites.create(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . f f f f f f . . . . 
+        . . . . . f f 1 1 f f f f . . . 
+        . . . . . 1 2 2 2 8 8 8 1 . . . 
+        . . . . f 1 2 2 2 8 8 8 1 f . . 
+        . . . b f 1 1 f f f f f 1 f b . 
+        . . . f f 1 1 f f f f f 1 f f . 
+        . . . f b 1 f f f f f f 1 b f . 
+        . . . f f 1 f 6 6 6 6 f 1 f f . 
+        . . . b f f 6 6 6 6 6 6 f f b . 
+        . . . b b 6 6 6 6 6 6 6 6 b b . 
+        . . . f b 1 1 1 1 1 1 1 1 b f . 
+        . . . f b d f f f f f f d b f . 
+        . . . . f d d f f f f d d f f . 
+        . . . . f f d f f f f d f f . . 
+        . . . . . b f f f f f f b . . . 
+        `, SpriteKind.Enemy)
+    tiles.placeOnTile(da_ops, value)
+    tiles.setTileAt(value, assets.tile`transparency16`)
+    da_ops.follow(mySprite, 130)
+}
+game.onUpdateInterval(200, function () {
+    info.changeScoreBy(1)
+})
